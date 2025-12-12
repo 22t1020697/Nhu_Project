@@ -1,0 +1,29 @@
+name: nhu_project
+description: "A new Flutter project."
+
+environment:
+  sdk: '>=3.0.0 <4.0.0' 
+
+# Các thư viện cần thiết cho dự án
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # english_words: ^4.0.0
+  # provider: ^6.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # flutter_lints: ^6.0.0
+
+# Cấu hình cho Flutter
+flutter:
+  uses-material-design: true
+
+  # assets:
+  #   - assets/image1.png
+  #   - assets/image2.png
+  #   - assets/image3.png
+  #   - assets/image4.png

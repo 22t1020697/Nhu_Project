@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nhu_project/Feedbackpage.dart';
+import 'package:nhu_project/loginpage.dart';
+import 'package:nhu_project/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Feedback Form',
+      title: 'Login & Profile App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const FeedbackPage(),
+      home: const LoginPage(),
     );
   }
 }

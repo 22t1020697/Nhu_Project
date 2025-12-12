@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // 1. IMPORT TỆP ĐĂNG KÝ MỚI
 //    Nhớ thay 'ten_du_an' bằng tên dự án thực tế của bạn
 import 'package:nhu_project/register_page.dart';
+import 'package:nhu_project/profile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,29 +36,44 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.green,
         ),
       );
+
+      // Điều hướng sang trang hồ sơ cá nhân sau 1 giây
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                username: _usernameController.text,
+              ),
+            ),
+          );
+        }
+      });
     }
   }
 
   // **** PHẦN MỚI: Hàm để điều hướng sang trang Đăng ký ****
   void _navigateToRegister() {
-      // Push RegisterPage and await returned credentials (if any).
-      Navigator.push<Map<String, String>>(
-        context,
-        MaterialPageRoute(builder: (context) => const RegisterPage()),
-      ).then((result) {
-        if (result != null && mounted) {
-          // If registration returned credentials, prefill the login fields
-          setState(() {
-            _usernameController.text = result['username'] ?? '';
-            _passwordController.text = result['password'] ?? '';
-          });
+    // Push RegisterPage and await returned credentials (if any).
+    Navigator.push<Map<String, String>>(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterPage()),
+    ).then((result) {
+      if (result != null && mounted) {
+        // If registration returned credentials, prefill the login fields
+        setState(() {
+          _usernameController.text = result['username'] ?? '';
+          _passwordController.text = result['password'] ?? '';
+        });
 
-          // Optionally show a confirmation message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Đã đăng ký — điền thông tin vào form đăng nhập')),
-          );
-        }
-      });
+        // Optionally show a confirmation message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Đã đăng ký — điền thông tin vào form đăng nhập')),
+        );
+      }
+    });
   }
   // ******************************************************
 
@@ -89,8 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                   return null;
                 },
               ),
-              
-              const SizedBox(height: 16), 
+
+              const SizedBox(height: 16),
 
               // (Trường Mật khẩu... không đổi)
               TextFormField(
@@ -102,7 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -132,7 +150,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
+                  child:
+                      const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
                 ),
               ),
 

@@ -40,10 +40,16 @@ class MyPlace extends StatelessWidget {
   /// Hình ảnh
   Widget block1() {
     return Image.asset(
-      "assets/images/sa-mac-sahara.jpg",
+      "assets/anh1.png",
       height: 240,
       width: double.infinity,
       fit: BoxFit.cover,
+      errorBuilder: (context, error, stack) => Container(
+        height: 240,
+        width: double.infinity,
+        color: Colors.grey.shade200,
+        child: const Center(child: Icon(Icons.broken_image, size: 40)),
+      ),
     );
   }
 

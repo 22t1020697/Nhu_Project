@@ -73,7 +73,15 @@ class Travelapp extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(places[index], fit: BoxFit.cover),
+                      child: Image.asset(
+                        places[index],
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stack) => Container(
+                          color: Colors.grey.shade200,
+                          child: const Center(
+                              child: Icon(Icons.broken_image, size: 40)),
+                        ),
+                      ),
                     );
                   },
                 ),

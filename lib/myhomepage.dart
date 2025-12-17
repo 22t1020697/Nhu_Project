@@ -15,6 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
         {'title': 'Đăng nhập API', 'route': '/api_login', 'icon': Icons.cloud},
         {'title': 'Đăng nhập', 'route': '/login', 'icon': Icons.login},
         {'title': 'Đăng ký', 'route': '/register', 'icon': Icons.person_add},
+        {'title': 'Hồ sơ', 'route': '/profile', 'icon': Icons.person},
       ],
     },
     {
@@ -36,6 +37,15 @@ class _MyHomePageState extends State<MyHomePage> {
       'items': [
         {'title': 'Sản phẩm', 'route': '/products', 'icon': Icons.shopping_bag},
         {'title': 'Phản hồi', 'route': '/feedback', 'icon': Icons.feedback},
+      ],
+    },
+    {
+      'title': '📍 Địa điểm & Du lịch',
+      'items': [
+        {'title': 'Địa điểm', 'route': '/places', 'icon': Icons.place},
+        {'title': 'Du lịch', 'route': '/travel', 'icon': Icons.flight},
+        {'title': 'Đặt chỗ', 'route': '/booking', 'icon': Icons.event},
+        {'title': 'Quay về Trang chính', 'route': '/home', 'icon': Icons.home},
       ],
     },
   ];

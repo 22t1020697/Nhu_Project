@@ -11,7 +11,7 @@ import 'package:nhu_project/feedback_page.dart';
 import 'package:nhu_project/bmi_page.dart';
 import 'package:nhu_project/dem.dart';
 import 'package:nhu_project/demthoigian.dart';
-import 'package:nhu_project/api_login.dart';
+import 'package:nhu_project/api_login_screen.dart';
 import 'package:nhu_project/change.dart';
 import 'package:nhu_project/myclassroom.dart';
 
@@ -28,8 +28,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Nhu Project',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.blue,
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       initialRoute: '/',
       routes: {
@@ -45,24 +46,34 @@ class MyApp extends StatelessWidget {
         '/bmi': (context) => const BmiPage(),
         '/counter': (context) => const CounterScreen(),
         '/timer': (context) => const CountdownTimerScreen(),
-        '/api_login': (context) => const ApiLoginPage(),
         '/change': (context) => const ColorChangerPage(),
         '/classroom': (context) => const MyClassroom(),
+        
+        // Sửa lỗi: Truyền callback cho LoginApiScreen
+        '/api_login': (context) => LoginApiScreen(
+          onLoginSuccess: (token) {
+            debugPrint("Đã nhận Token tại Main: $token");
+          },
+        ),
       },
       onGenerateRoute: (settings) {
-        // Support passing arguments to the ProfilePage using a username String
+        // Xử lý route /profile linh hoạt
         if (settings.name == '/profile') {
           final args = settings.arguments;
-          final username = args is String ? args : '';
+          
+          // Nếu bạn chỉ truyền username kiểu String (như file profile.dart hiện tại)
+          final String username = args is String ? args : 'Guest';
+          
           return MaterialPageRoute(
             builder: (context) => ProfilePage(username: username),
             settings: settings,
           );
         }
-        // Unknown route
+
+        // Route không tồn tại
         return MaterialPageRoute(
           builder: (context) => const Scaffold(
-            body: Center(child: Text('Route not found')),
+            body: Center(child: Text('Trang không tồn tại')),
           ),
         );
       },

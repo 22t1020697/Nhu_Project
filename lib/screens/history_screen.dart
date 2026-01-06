@@ -1,122 +1,78 @@
 import 'package:flutter/material.dart';
+import '../models/water_history.dart';
+import '../services/history_service.dart';
 
-class HistoryScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> history;
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
 
-  const HistoryScreen({
-    super.key,
-    required this.history,
-  });
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
 
-  Map<String, List<Map<String, dynamic>>> _groupByDate() {
-    final Map<String, List<Map<String, dynamic>>> grouped = {};
+class _HistoryScreenState extends State<HistoryScreen> {
+  List<WaterHistory> history = [];
 
-    for (var item in history) {
-      final date = item['date'] as DateTime;
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    history = await HistoryService.getHistory();
+    setState(() {});
+  }
+
+  Map<String, List<WaterHistory>> _groupByDate() {
+    final Map<String, List<WaterHistory>> result = {};
+
+    for (final item in history) {
       final key =
-          '${date.day.toString().padLeft(2, '0')}/'
-          '${date.month.toString().padLeft(2, '0')}/'
-          '${date.year}';
+          '${item.date.day}/${item.date.month}/${item.date.year}';
 
-      grouped.putIfAbsent(key, () => []);
-      grouped[key]!.add(item);
+      result.putIfAbsent(key, () => []);
+      result[key]!.add(item);
     }
-
-    return grouped;
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    const backgroundBlue = Color(0xFFE1F5FE);
-    const cardPink = Color(0xFFFFEBEE);
-    const accentBlue = Color(0xFF0288D1);
-    const accentPink = Color(0xFFF48FB1);
-
-    final groupedHistory = _groupByDate();
+    final grouped = _groupByDate();
 
     return Scaffold(
-      backgroundColor: backgroundBlue,
+      backgroundColor: const Color(0xFFE1F5FE),
       appBar: AppBar(
-        backgroundColor: backgroundBlue,
-        elevation: 0,
+        title: const Text('Thống kê uống nước'),
         centerTitle: true,
-        title: const Text(
-          'Thống kê uống nước',
-          style: TextStyle(color: accentBlue),
-        ),
-        iconTheme: const IconThemeData(color: accentBlue),
+        backgroundColor: const Color(0xFFE1F5FE),
+        elevation: 0,
       ),
-      body: groupedHistory.isEmpty
-          ? const Center(child: Text('Chưa có dữ liệu'))
+      body: grouped.isEmpty
+          ? const Center(child: Text('Chưa có dữ liệu 💧'))
           : ListView(
-              padding: const EdgeInsets.all(20),
-              children: groupedHistory.entries.map((entry) {
-                final date = entry.key;
-                final items = entry.value;
-                final total = items.fold<double>(
-                    0, (sum, e) => sum + e['amount']);
+              padding: const EdgeInsets.all(16),
+              children: grouped.entries.map((entry) {
+                final total = entry.value
+                    .fold<int>(0, (sum, e) => sum + e.amount);
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: cardPink,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.pink.withOpacity(0.25),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 📅 NGÀY + TỔNG
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '📅 $date',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: accentBlue,
-                            ),
-                          ),
-                          Text(
-                            '${total.toInt()} ml',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: accentPink,
-                            ),
-                          ),
-                        ],
-                      ),
+                return ExpansionTile(
+                  leading: const Icon(Icons.calendar_today),
+                  title: Text(entry.key),
+                  trailing: Text('$total ml',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue)),
+                  children: entry.value.map((item) {
+                    final timeText =
+                        '${item.time.hour.toString().padLeft(2, '0')}:${item.time.minute.toString().padLeft(2, '0')}';
 
-                      const SizedBox(height: 12),
-
-                      // 💧 DANH SÁCH TRONG NGÀY
-                      ...items.map((item) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(Icons.water_drop,
-                                  color: accentPink, size: 18),
-                              Text('${item['amount']} ml'),
-                              Text(item['time'],
-                                  style: const TextStyle(
-                                      color: Colors.black54)),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ],
-                  ),
+                    return ListTile(
+                      leading: const Icon(Icons.water_drop),
+                      title: Text('${item.amount} ml'),
+                      subtitle: Text(timeText),
+                    );
+                  }).toList(),
                 );
               }).toList(),
             ),

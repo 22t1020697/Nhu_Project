@@ -7,12 +7,19 @@ class DrinkShopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const backgroundBlue = Color(0xFFE1F5FE);
+    const cardPink = Color(0xFFFFEBEE);
+    const accentBlue = Color(0xFF0288D1);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE),
+      backgroundColor: backgroundBlue,
       appBar: AppBar(
-        title: const Text('Đồ uống sức khỏe'),
+        title: const Text(
+          'Đồ uống sức khỏe',
+          style: TextStyle(color: accentBlue, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFE1F5FE),
+        backgroundColor: backgroundBlue,
         elevation: 0,
       ),
       body: GridView.builder(
@@ -20,12 +27,13 @@ class DrinkShopScreen extends StatelessWidget {
         itemCount: drinkData.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 14,
-          crossAxisSpacing: 14,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
           childAspectRatio: 0.75,
         ),
         itemBuilder: (context, index) {
           final drink = drinkData[index];
+
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -37,12 +45,12 @@ class DrinkShopScreen extends StatelessWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFFFEBEE),
-                borderRadius: BorderRadius.circular(20),
+                color: cardPink,
+                borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.pink.withOpacity(0.25),
-                    blurRadius: 15,
+                    blurRadius: 16,
                   ),
                 ],
               ),
@@ -51,7 +59,7 @@ class DrinkShopScreen extends StatelessWidget {
                   Expanded(
                     child: ClipRRect(
                       borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(20)),
+                          const BorderRadius.vertical(top: Radius.circular(22)),
                       child: Image.asset(
                         drink['image']!,
                         width: double.infinity,
@@ -59,15 +67,19 @@ class DrinkShopScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    drink['name']!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      drink['name']!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: accentBlue,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                 ],
               ),
             ),

@@ -5,6 +5,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi sáng sau ăn',
     'amount': '200 – 300 ml / ngày',
     'advice': 'Tăng đề kháng, không nên uống khi đói',
+    'recipe': 'Vắt nước từ 2-3 quả cam tươi, thêm đường hoặc mật ong theo khẩu vị, khuấy đều và thêm đá nếu muốn.',
+    'youtube': 'https://www.youtube.com/watch?v=p6kavAubLxs',
   },
   {
     'name': 'Trà xanh',
@@ -12,6 +14,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi sáng hoặc đầu giờ chiều',
     'amount': '300 – 500 ml / ngày',
     'advice': 'Giúp đốt mỡ, tránh uống buổi tối',
+    'recipe': 'Hãm lá trà xanh với nước nóng 80°C.',
+    'youtube': 'https://www.youtube.com/watch?v=dB04xp_5Xzs',
   },
   {
     'name': 'Nước dừa',
@@ -19,14 +23,17 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Sau vận động hoặc buổi trưa',
     'amount': '300 – 400 ml / ngày',
     'advice': 'Bù điện giải, không uống buổi tối',
+    'recipe': 'Uống trực tiếp nước dừa tươi.',
+    'youtube': 'https://www.youtube.com/shorts/oFQOIUqcR9k',
   },
-
   {
     'name': 'Sinh tố bơ',
     'image': 'assets/drinks/avocado_smoothie.jpg',
     'bestTime': 'Buổi sáng hoặc chiều',
     'amount': '200 – 300 ml / ngày',
-    'advice': 'Tốt cho tim mạch, da',
+    'advice': 'Tốt cho tim mạch, đẹp da',
+    'recipe': 'Xay bơ + sữa tươi + đá.',
+    'youtube': 'https://www.youtube.com/watch?v=aLNRx2LxdFI',
   },
   {
     'name': 'Nước chanh mật ong',
@@ -34,6 +41,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi sáng',
     'amount': '200 ml / ngày',
     'advice': 'Thanh lọc cơ thể',
+    'recipe': 'Chanh + mật ong + nước ấm.',
+    'youtube': 'https://www.youtube.com/watch?v=mgX7jDQZyfg',
   },
   {
     'name': 'Sữa hạt',
@@ -41,6 +50,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi sáng hoặc tối',
     'amount': '250 ml / ngày',
     'advice': 'Giàu dinh dưỡng, dễ tiêu',
+    'recipe': 'Ngâm hạt, xay với nước, lọc.',
+    'youtube': 'https://www.youtube.com/watch?v=G21fEvbhG20',
   },
   {
     'name': 'Trà gừng',
@@ -48,6 +59,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi sáng',
     'amount': '200 ml / ngày',
     'advice': 'Giữ ấm cơ thể, tốt tiêu hóa',
+    'recipe': 'Gừng lát + nước nóng.',
+    'youtube': 'https://www.youtube.com/watch?v=pJHcmD2LF20',
   },
   {
     'name': 'Nước ép cà rốt',
@@ -55,6 +68,8 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi trưa',
     'amount': '200 – 300 ml / ngày',
     'advice': 'Tốt cho mắt',
+    'recipe': 'Cà rốt ép lấy nước.',
+    'youtube': 'https://www.youtube.com/watch?v=DHjg50xsu7E',
   },
   {
     'name': 'Trà hoa cúc',
@@ -62,5 +77,7 @@ final List<Map<String, String>> drinkData = [
     'bestTime': 'Buổi tối',
     'amount': '200 ml / ngày',
     'advice': 'Giúp ngủ ngon',
+    'recipe': ' Hoa cúc cho vào ly và tráng sơ qua với nước ấm. Bạn tiếp tục rót nước sôi, đậy nắp để 3 phút cho trà ngấm..',
+    'youtube': 'https://www.youtube.com/watch?v=bD8nwfh0XjI',
   },
 ];

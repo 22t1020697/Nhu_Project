@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+
 import '../models/user_profile.dart';
+import '../models/water_history.dart';
 import '../services/water_calculator.dart';
+import '../services/history_service.dart';
+
 import 'profile_screen.dart';
 import 'reminder_screen.dart';
 import 'history_screen.dart';
 import 'bmi_screen.dart';
 import 'drink_shop_screen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   final UserProfile user;
@@ -20,18 +23,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double totalDrankMl = 0;
 
-  /// ✅ LỊCH SỬ HÔM NAY – DÙNG CHUNG CHO HOME + HISTORY SCREEN
-  final List<Map<String, dynamic>> history = [];
+  /// 📜 LỊCH SỬ HÔM NAY
+  final List<WaterHistory> history = [];
 
-  void _addWater(double amount) {
+  /// ➕ THÊM NƯỚC
+  void _addWater(int amount) {
+    final now = DateTime.now();
+
+    final item = WaterHistory(
+      amount: amount,
+      time: now,
+      date: DateTime(now.year, now.month, now.day),
+    );
+
     setState(() {
       totalDrankMl += amount;
-      history.insert(0, {
-        'amount': amount,
-        'time': TimeOfDay.now().format(context),
-        'date': DateTime.now(),
-      });
+      history.insert(0, item);
     });
+
+    HistoryService.save(item);
   }
 
   @override
@@ -46,92 +56,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Water Reminder'),
+        title: const Text('WaterCare'),
         centerTitle: true,
       ),
-
-      // ✅ DRAWER
       drawer: _buildDrawer(context),
-
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              'Mục tiêu hôm nay',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text('Mục tiêu hôm nay',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
-
             Text(
               '${dailyGoalLit.toStringAsFixed(1)} lít',
               style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
             ),
-
             const SizedBox(height: 20),
-
-            // 🧴 BÌNH NƯỚC
             buildWaterBottle(progress),
-
             const SizedBox(height: 20),
-
-            LinearProgressIndicator(
-              value: progress,
-              minHeight: 12,
-            ),
-
+            LinearProgressIndicator(value: progress, minHeight: 12),
             const SizedBox(height: 8),
             Text('${totalDrankMl.toInt()} ml đã uống'),
-
             const SizedBox(height: 20),
 
-            // ➕ NÚT UỐNG NƯỚC
+            /// NÚT UỐNG
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => _addWater(200),
-                  child: const Text('+200ml'),
-                ),
+                    onPressed: () => _addWater(200),
+                    child: const Text('+200ml')),
                 ElevatedButton(
-                  onPressed: () => _addWater(300),
-                  child: const Text('+300ml'),
-                ),
+                    onPressed: () => _addWater(300),
+                    child: const Text('+300ml')),
                 ElevatedButton(
-                  onPressed: () => _addWater(500),
-                  child: const Text('+500ml'),
-                ),
+                    onPressed: () => _addWater(500),
+                    child: const Text('+500ml')),
               ],
             ),
 
             const SizedBox(height: 20),
-
-            // 📜 LỊCH SỬ HÔM NAY
-            const Text(
-              'Lịch sử hôm nay',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            const Text('Lịch sử hôm nay',
+                style: TextStyle(fontWeight: FontWeight.bold)),
 
             Expanded(
               child: history.isEmpty
-                  ? const Center(
-                      child: Text('Chưa có dữ liệu uống nước'),
-                    )
+                  ? const Center(child: Text('Chưa có dữ liệu uống nước'))
                   : ListView.builder(
                       itemCount: history.length,
                       itemBuilder: (context, index) {
                         final item = history[index];
+                        final timeText =
+                            '${item.time.hour.toString().padLeft(2, '0')}:${item.time.minute.toString().padLeft(2, '0')}';
+
                         return ListTile(
-                          leading: const Icon(
-                            Icons.water_drop,
-                            color: Colors.blue,
-                          ),
-                          title: Text('${item['amount']} ml'),
-                          subtitle: Text(item['time']),
+                          leading: const Icon(Icons.water_drop,
+                              color: Colors.blue),
+                          title: Text('${item.amount} ml'),
+                          subtitle: Text(timeText),
                         );
                       },
                     ),
@@ -142,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //////////////////// MENU DRAWER ////////////////////
+  /// ☰ MENU
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -155,77 +140,48 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Icon(Icons.water_drop, color: Colors.white, size: 40),
                 SizedBox(height: 10),
-                Text(
-                  'Water Reminder',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
+                Text('WaterCare',
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
               ],
             ),
           ),
-
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Thông tin cá nhân'),
-            onTap: () {
-              Navigator.pushReplacement(
+            onTap: () => Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const ProfileScreen(),
-                ),
-              );
-            },
+                MaterialPageRoute(builder: (_) => const ProfileScreen())),
           ),
           ListTile(
             leading: const Icon(Icons.monitor_weight),
             title: const Text('Chỉ số BMI'),
-            onTap: () {
-              Navigator.push(
+            onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => BmiScreen(user: widget.user),
-                ),
-              );
-            },
+                    builder: (_) => BmiScreen(user: widget.user))),
           ),
           ListTile(
             leading: const Icon(Icons.local_cafe),
             title: const Text('Đồ uống sức khỏe'),
-            onTap: () {
-              Navigator.push(
+            onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const DrinkShopScreen(),
-                ),
-              );
-            },
+                    builder: (_) => const DrinkShopScreen())),
           ),
-
-
           ListTile(
             leading: const Icon(Icons.access_time),
             title: const Text('Hẹn giờ uống nước'),
-            onTap: () {
-              Navigator.push(
+            onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const ReminderScreen(),
-                ),
-              );
-            },
+                    builder: (_) => const ReminderScreen())),
           ),
-
-          /// ✅ LIÊN KẾT LỊCH SỬ HÔM NAY → HISTORY SCREEN
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text('Lịch sử uống nước'),
-            onTap: () {
-              Navigator.push(
+            onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => HistoryScreen(history: history),
-                ),
-              );
-            },
+                MaterialPageRoute(builder: (_) => const HistoryScreen())),
           ),
         ],
       ),
@@ -233,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-//////////////////// BÌNH NƯỚC ////////////////////
+/// 🧴 BÌNH NƯỚC
 Widget buildWaterBottle(double progress) {
   return Center(
     child: Stack(
@@ -258,14 +214,11 @@ Widget buildWaterBottle(double progress) {
         ),
         Positioned(
           top: 140,
-          child: Text(
-            '${(progress * 100).toInt()}%',
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
+          child: Text('${(progress * 100).toInt()}%',
+              style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
         ),
       ],
     ),
